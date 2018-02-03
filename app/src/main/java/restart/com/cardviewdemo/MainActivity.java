@@ -1,9 +1,10 @@
 package restart.com.cardviewdemo;
 
-import android.support.v7.app.AppCompatActivity;
+import android.graphics.Rect;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,10 +27,40 @@ public class MainActivity extends AppCompatActivity {
         mRcycleView = findViewById(R.id.recycle);
         cities = DataUtil.getData();
         //设置布局LinearLayoutManager:列表  GridLayoutManager：网格 StaggeredGridLayoutManager:瀑布流
-        mRcycleView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+//        mRcycleView.setLayoutManager(new LinearLayoutManager(MainActivity.this));
+        mRcycleView.setLayoutManager(new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL));
+        //
+        mRcycleView.addItemDecoration(new ItemDecoration(20));
         //j将适配器设置给控件
         mRcycleView.setAdapter(new Adapter());
 
+    }
+
+    /*
+    * 分割线
+    * */
+    class ItemDecoration extends RecyclerView.ItemDecoration {
+        int space;
+
+        public ItemDecoration(int space) {
+            this.space = space;
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+            super.getItemOffsets(outRect, view, parent, state);
+            if (parent.getChildAdapterPosition(view)%2==0){
+                outRect.top = 30;
+
+            }else {
+                outRect.top = space;
+            }
+            outRect.bottom = space;
+            outRect.top = space;
+            outRect.left = space;
+            outRect.right = space;
+
+        }
     }
 
     /*适配器*/
